@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Problem 1</title>
-
- <script type="text/javascript">
+  <head>
+    <title>reading file</title>
+    <script type="text/javascript">
 
 	var reader = new FileReader();
 
-	function readText(){
-			var reader = new FileReader();
+	function readText(that){
 
+		if(that.files && that.files[0]){
+			var reader = new FileReader();
 			reader.onload = function (e) {  
 				var output=e.target.result;
+
+				//process text to show only lines with "@":				
+				output=output.split("\n").filter(/./.test, /\@/).join("\n");
+
 				document.getElementById('main').innerHTML= output;
-            }
-			reader.readAsText('http://www.swpc.noaa.gov/ftpdir/indices/events/events.txt');
-    } 
-
+			};//end onload()
+			reader.readAsText(that.files[0]);
+		}//end if html5 filelist support
+	} 
 </script>
-
 </head>
 <body>
-	<input type="button" id="decode" onclick="readText()" value="Decode">
+	<input type="Problem01.txt" onchange='readText(this)' />
 	<div id="main"></div>
   </body>
 </html>
