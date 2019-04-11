@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<link href="txtstyle.css" rel="stylesheet" type="text/css" />
+<body>
+<title>Dynamic Memory Management in C</title>
+/*Trey Rhodes
+/ Dynamic Memory Management. Program #3
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+int nodesDQ = 0;
+struct node {
+        char *  word;
+        struct node * next;
+};
+int enqueue (char * string, struct node ** head, struct node ** tail) {
+        struct node * temp = (struct node *) malloc (sizeof(struct node));
+        if (temp == NULL) {
+                return 0;
+        }
+        (*temp).word = string;
+        (*temp).next = NULL;
+        if ((*head) == NULL){
+                *head = temp;
+        } else {
+                (*temp).next = NULL;
+                (**tail).next = temp;
+        }
+        *tail = temp;
+        return 1;
+}
+char * dequeue (struct node ** head, struct node ** tail) {
+        struct node * temp;
+        char * string = NULL;
+        if ((*head) != NULL) {
+                temp = *head;
+                string = (**head).word;
+                if ((**head).next == NULL) {
+                        (*tail) = NULL;
+                }
+                (*head) = (*temp).next;
+                free((*temp).word);
+                free(temp);
+        }
+        nodesDQ++;
+        return string;
+}
+
+void main(int argv, char **argc) {
+        srand(time(NULL));
+        struct node ** head = (struct node **) malloc (sizeof(struct node));
+        struct node ** tail = (struct node **) malloc (sizeof(struct node));
+        int i;
+        int j;
+        for (i = 0; i < 10; i++) {
+                char * sp = (char *)malloc(1000000*sizeof(char));
+                for (j = 0; j < 1000000; j++) {
+                        (sp) [j] = rand() % 26 + 65;
+                }
+                (sp)[999999] = '\0';
+                enqueue(sp, head, tail);
+                //printf("%d\n", nodesDQ); fflush(stdout);
+        }
+        for (i = 0; i < 100000; i++) {
+                char * sp = (char *)malloc(1000000*sizeof(char));
+                for (j = 0; j < 1000000; j++) {
+                        (sp) [j] = rand() % 26 + 65;
+                }
+                (sp)[999999] = '\0';
+                enqueue(sp, head, tail);
+                dequeue(head, tail);
+                //printf("%d\n", nodesDQ); fflush(stdout);
+        }
+        for (i = 0; i < 12; i++) {
+                dequeue(head, tail);
+                //printf("%d\n", nodesDQ); fflush(stdout);
+        }
+        printf("%d\n", nodesDQ);
+}
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<link href="txtstyle.css" rel="stylesheet" type="text/css" />
+<body>
+<title>Counter Sort in C</title>
+/*Trey Rhodes
+/ External Counter Sort. Program #4
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
+
+void main (int argc, char ** argv) {
+	if (argc < 3) { //checks to see that at least 3 arguments are input at the commands line 
+		printf("Error: too few arguments\n");
+	}
+	else {
+		FILE * infile = fopen(argv[1], "r");
+		FILE * outfile = fopen (argv[2], "w");
+		int * counterArray = (int *)malloc(10*sizeof(int));
+		int x = 0;
+		fscanf(infile,"%1d",&x);
+		while (!feof(infile)) {
+			counterArray[x]++;
+			fscanf(infile,"%1d",&x);
+		}
+		int i;
+		int j;
+		for (i = 0; i < 10; i++){
+			for (j = 0; j < counterArray[i]; j++){
+				fprintf(outfile,"%d",i);
+			}
+		}
+	}
+}
+</body>
+</html>

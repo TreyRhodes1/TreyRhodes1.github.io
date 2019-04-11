@@ -2,32 +2,29 @@
 <html>
 <link href="txtstyle.css" rel="stylesheet" type="text/css" />
 <body>
-<title>Dijkstra's Algorithm in C</title>
+<title>Prim's Algorithm in C</title>
 /*Trey Rhodes
-/ Djikstras. Program #1
+/ Prims. Program #2
 */
 #include <stdio.h>
 #include <limits.h>
 /*takes a hardcoded adjacency matrix and computes the shortest path between nodes*/
 void main(int argc, char **argv[]) {
   /*This 2d array that holds the distances between nodes (0 meaning no possible path)*/
-  int adjMat[5][5] = {
-                { 0, 4, 0, 11, 10 },
-                { 4, 0, 3, 0, 6 },
-                { 0, 3, 0, 2, 4 },
-                { 11, 0, 2, 0, 1 },
-                { 10, 6, 4, 1, 0 }};
+  int adjMat[4][4] = {
+                { 0, 8, 1, 0 },
+                { 8, 0, 6, 3 },
+                { 1, 6, 0, 2 },
+                { 0, 3 ,2 ,0 }};
   /*nodes holds the names of the nodes in the adjacency matrix, left to right and top to
     bottom, respectively*/
-  char nodes[] = { 'A', 'B', 'C', 'D', 'E' };
+  char nodes[] = { 'A', 'B', 'C', 'D'};
   /*prevNodes holds the names of the nodes previous to other nodes*/
-  char prevNodes[5];
-  /*prevDis is the int used to calculate new distances from adjMat*/
-  int prevDis = 0;
+  char prevNodes[4];
   /*curDis holds the current best distances between nodes*/
-  int curDis[] = { 0, INT_MAX, INT_MAX, INT_MAX, INT_MAX };
+  int curDis[] = { 0, INT_MAX, INT_MAX, INT_MAX };
   /*curVis holds 1 for true or 0 for false to see if a node has been visited*/
-  int curVis[] = { 1, 0, 0, 0, 0};
+  int curVis[] = { 1, 0, 0, 0 };
   /*i is the variable used to iterate through rows in adjMat, j goes through columns*/
   int i;
   int j;
@@ -38,11 +35,11 @@ void main(int argc, char **argv[]) {
   /*size holds the length of one row in adjMat*/
   /*sizeof returns the arithmetic width of the passed parameter ((4*5)/4 = 5)*/
   int size = sizeof(adjMat[0]) / sizeof(int);
-  while(i<5) {
+  while(i<4) {
     for (j = 0; j < size; j++) {
       /*this if statement checks the current best distance of a node against the new distance*/
-      if (adjMat[nextNode][j] > 0 && adjMat[nextNode][j] + prevDis < curDis[j] && curVis[j] == 0) {
-        curDis[j] = adjMat[nextNode][j] + prevDis;
+      if (adjMat[nextNode][j] > 0 && adjMat[nextNode][j] < curDis[j] && curVis[j] == 0) {
+        curDis[j] = adjMat[nextNode][j];
         prevNodes[j] = nodes[nextNode];
       }
     }
@@ -50,13 +47,12 @@ void main(int argc, char **argv[]) {
     lowestInd = INT_MAX;
     for (j = 0; j < size; j++) {
       if (adjMat[nextNode][j] < lowest && curVis[j] == 0 && adjMat[nextNode][j] > 0) {
-        lowest += adjMat[nextNode][j];
+        lowest = adjMat[nextNode][j];
         lowestInd = j;
       }
     }
     if (lowestInd < size) {
       curVis[lowestInd] = 1;
-      prevDis = curDis[lowestInd];
       nextNode = lowestInd;
     }
     i++;
