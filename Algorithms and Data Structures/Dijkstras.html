@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<link href="txtstyle.css" rel="stylesheet" type="text/css" />
+<body>
+<title>Algorithms and Data Structures</title>
+/*Trey Rhodes
+/ Djikstras
+*/
+#include <stdio.h>
+#include <limits.h>
+/*takes a hardcoded adjacency matrix and computes the shortest path between nodes*/
+void main(int argc, char **argv[]) {
+  /*This 2d array that holds the distances between nodes (0 meaning no possible path)*/
+  int adjMat[5][5] = {
+                { 0, 4, 0, 11, 10 },
+                { 4, 0, 3, 0, 6 },
+                { 0, 3, 0, 2, 4 },
+                { 11, 0, 2, 0, 1 },
+                { 10, 6, 4, 1, 0 }};
+  /*nodes holds the names of the nodes in the adjacency matrix, left to right and top to
+    bottom, respectively*/
+  char nodes[] = { 'A', 'B', 'C', 'D', 'E' };
+  /*prevNodes holds the names of the nodes previous to other nodes*/
+  char prevNodes[5];
+  /*prevDis is the int used to calculate new distances from adjMat*/
+  int prevDis = 0;
+  /*curDis holds the current best distances between nodes*/
+  int curDis[] = { 0, INT_MAX, INT_MAX, INT_MAX, INT_MAX };
+  /*curVis holds 1 for true or 0 for false to see if a node has been visited*/
+  int curVis[] = { 1, 0, 0, 0, 0};
+  /*i is the variable used to iterate through rows in adjMat, j goes through columns*/
+  int i;
+  int j;
+  /*lowest holds the value of the shortest distance, lowestIndx/y hold that values index*/
+  int lowest = 0;
+  int lowestInd = 0;
+  int nextNode = 0;
+  /*size holds the length of one row in adjMat*/
+  /*sizeof returns the arithmetic width of the passed parameter ((4*5)/4 = 5)*/
+  int size = sizeof(adjMat[0]) / sizeof(int);
+  while(i<5) {
+    for (j = 0; j < size; j++) {
+      /*this if statement checks the current best distance of a node against the new distance*/
+      if (adjMat[nextNode][j] > 0 && adjMat[nextNode][j] + prevDis < curDis[j] && curVis[j] == 0) {
+        curDis[j] = adjMat[nextNode][j] + prevDis;
+        prevNodes[j] = nodes[nextNode];
+      }
+    }
+    lowest = INT_MAX;
+    lowestInd = INT_MAX;
+    for (j = 0; j < size; j++) {
+      if (adjMat[nextNode][j] < lowest && curVis[j] == 0 && adjMat[nextNode][j] > 0) {
+        lowest += adjMat[nextNode][j];
+        lowestInd = j;
+      }
+    }
+    if (lowestInd < size) {
+      curVis[lowestInd] = 1;
+      prevDis = curDis[lowestInd];
+      nextNode = lowestInd;
+    }
+    i++;
+  }
+  for (i = 0; i < size; i++) {
+    if (prevNodes[i] >= 'A')
+      printf("%c %d %c\n", nodes[i], curDis[i], prevNodes[i]);
+    else
+      printf("%c %d\n", nodes[i], curDis[i]);
+  }
+}
+</body>
+</html>
