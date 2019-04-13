@@ -1,7 +1,11 @@
 $myMargin: 10px auto;
 $myColor: #0c64c9;
 $myWidth: 600px;
+$myBorder: 10px;
+
 h1 {
 	color: $myColor;
 	margin: $myMargin;
+	border: $myBorder;
 }
+
